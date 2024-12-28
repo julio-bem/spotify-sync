@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import NavBar from '../components/NavBar';
 
 interface SpotifyAuthParams {
   access_token: string;
@@ -46,7 +47,7 @@ const Home: React.FC = () => {
 
   return (
     <div>
-      <h1>Hello World</h1>
+      <NavBar activePage="home" />
     </div>
   );
 };
