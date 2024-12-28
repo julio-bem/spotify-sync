@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 interface ButtonProps {
@@ -22,18 +21,21 @@ const StyledButton = styled.button<ButtonProps>`
   color: ${({ color }) => color || 'black'};
   font-size: ${({ fontSize }) => fontSize || '16px'};
   font-weight: ${({ fontWeight }) => fontWeight || '700'};
-  line-height: ${({lineHeight}) => lineHeight || '20px'};
+  line-height: ${({ lineHeight }) => lineHeight || '20px'};
   border-radius: ${({ borderRadius }) => borderRadius || '24px'};
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
 
   &:hover {
     transform: scale(1.05);
   }
 
   &:active {
-    background-color: ${({ backgroundColor }) => backgroundColor ? `${backgroundColor}99` : '#1aa34a'};
+    background-color: ${({ backgroundColor }) =>
+      backgroundColor ? `${backgroundColor}99` : '#1aa34a'};
   }
 
   @media (max-width: 768px) {
@@ -58,7 +60,7 @@ const Button: React.FC<ButtonProps> = ({
   fontSize,
   fontWeight,
   lineHeight,
-  borderRadius
+  borderRadius,
 }) => {
   return (
     <StyledButton
