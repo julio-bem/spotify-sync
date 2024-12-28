@@ -45,7 +45,11 @@ const NavBar: React.FC<NavBarProps> = ({ activePage }) => {
 
   return (
     <NavBarContainer>
-      <SpotifyLogo width="164px" height="49.06px" />
+      <SpotifyLogo
+        onClick={() => navigate('/home')}
+        width="164px"
+        height="49.06px"
+      />
       <NavBarMainButtonsContainer>
         {navItems.map((item) => (
           <NavButton
