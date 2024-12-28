@@ -12,9 +12,9 @@ interface NavButtonProps {
   children?: React.ReactNode;
 }
 
-interface IconProps {
+interface DynamicStyleProps {
   isActive: boolean;
-  variant: 'home' | 'artists' | 'playlists' | 'profile';
+  variant?: 'home' | 'artists' | 'playlists' | 'profile';
 }
 
 const NavButtonContainer = styled.div`
@@ -31,6 +31,13 @@ const NavButtonContainer = styled.div`
     transform: scale(1.06);
     transition: transform 0.3s ease;
   }
+`;
+
+const Text = styled.p<DynamicStyleProps>`
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 13px;
+  color: ${({ isActive }) => (isActive ? '#fff' : '#949EA2')};
 `;
 
 const NavButton: React.FC<NavButtonProps> = ({
@@ -59,7 +66,7 @@ const NavButton: React.FC<NavButtonProps> = ({
   const CurrentIcon = getCurrentIcon(variant);
 
   const StyledIcon = styled(
-    CurrentIcon as React.FC<React.SVGProps<SVGSVGElement> & IconProps>
+    CurrentIcon as React.FC<React.SVGProps<SVGSVGElement> & DynamicStyleProps>
   )`
     width: 24px;
     height: 24px;
@@ -72,7 +79,7 @@ const NavButton: React.FC<NavButtonProps> = ({
   return (
     <NavButtonContainer onClick={onClick}>
       <StyledIcon isActive={isActive} variant={variant} />
-      <p>{children}</p>
+      <Text isActive={isActive}>{children}</Text>
     </NavButtonContainer>
   );
 };
