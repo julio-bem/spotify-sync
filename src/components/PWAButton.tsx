@@ -9,7 +9,7 @@ interface PWAButtonProps {
 const PWAButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 16px;
+  gap: 26px;
   align-items: center;
   justify-content: flex-start;
   cursor: pointer;
