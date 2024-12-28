@@ -4,11 +4,11 @@ import OrdinaryText from '../components/OrdinaryText';
 import SpotifyLogo from '../components/SpotifyLogo';
 import styled from 'styled-components';
 
-const CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
-const SPOTIFY_AUTHORIZE_ENDPOINT =
-  process.env.REACT_APP_SPOTIFY_AUTHORIZE_ENDPOINT;
-const REDIRECT_URL_AFTER_LOGIN = process.env.REACT_APP_SPOTIFY_REDIRECT_URL;
-const SCOPES = process.env.REACT_APP_SPOTIFY_SCOPES?.split(' ') || [];
+const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+const SPOTIFY_AUTHORIZE_ENDPOINT = import.meta.env
+  .VITE_SPOTIFY_AUTHORIZE_ENDPOINT;
+const REDIRECT_URL_AFTER_LOGIN = import.meta.env.VITE_SPOTIFY_REDIRECT_URL;
+const SCOPES = import.meta.env.VITE_SPOTIFY_SCOPES?.split(' ') || [];
 const SPACE_DELIMITER = '%20';
 const SCOPES_URL_PARAM = SCOPES.join(SPACE_DELIMITER);
 
