@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 import spotifyLogo from '../assets/images/spotify_logo.png';
 

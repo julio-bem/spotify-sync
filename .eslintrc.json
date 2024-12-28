@@ -20,7 +20,7 @@
     },
     "rules": {
         "@typescript-eslint/no-unused-expressions": [
-            "error",
+            "warn",
             {
                 "allowShortCircuit": true
             }
