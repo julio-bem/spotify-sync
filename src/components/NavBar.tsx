@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import NavButton from './NavButton';
 import SpotifyLogo from './SpotifyLogo';
 import { useNavigate } from 'react-router-dom';
+import PWAButton from './PWAButton';
 
 interface NavBarProps {
   activePage: 'home' | 'artists' | 'playlists' | 'profile';
@@ -16,6 +17,8 @@ const NavBar: React.FC<NavBarProps> = ({ activePage }) => {
     height: 100vh;
     width: 250px;
     padding: 31.04px 30px 14px;
+    display: flex;
+    flex-direction: column;
   `;
 
   const NavBarMainButtonsContainer = styled.div`
@@ -62,6 +65,7 @@ const NavBar: React.FC<NavBarProps> = ({ activePage }) => {
           </NavButton>
         ))}
       </NavBarMainButtonsContainer>
+      <PWAButton onClick={() => navigate('/home')} />
     </NavBarContainer>
   );
 };

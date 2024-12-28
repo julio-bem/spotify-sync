@@ -25,7 +25,7 @@ const NavButtonContainer = styled.div`
   justify-content: flex-start;
   cursor: pointer;
   transition: transform 0.1s ease;
-  padding: 12px;
+  padding: 12px 0;
 
   &:hover {
     transform: scale(1.06);
