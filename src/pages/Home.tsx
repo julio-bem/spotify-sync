@@ -47,7 +47,7 @@ const Home: React.FC = () => {
 
   return (
     <div>
-      <NavBar />
+      <NavBar activePage="home" />
     </div>
   );
 };

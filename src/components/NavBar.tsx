@@ -2,8 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import NavButton from './NavButton';
 import SpotifyLogo from './SpotifyLogo';
+import { useNavigate } from 'react-router-dom';
 
-const NavBar = () => {
+interface NavBarProps {
+  activePage: 'home' | 'artists' | 'playlists' | 'profile';
+}
+
+const NavBar: React.FC<NavBarProps> = ({ activePage }) => {
+  const navigate = useNavigate();
+
   const NavBarContainer = styled.div`
     background-color: #000;
     height: 100vh;
@@ -14,17 +21,42 @@ const NavBar = () => {
   const NavBarMainButtonsContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    margin-top: 43px;
+    margin-top: 31px;
   `;
+
+  const navItems: {
+    variant: 'home' | 'artists' | 'playlists' | 'profile';
+    label: string;
+    path: string;
+  }[] = [
+    { variant: 'home', label: 'Home', path: '/home' },
+    {
+      variant: 'artists',
+      label: 'Artistas',
+      path: '/artists',
+    },
+    {
+      variant: 'playlists',
+      label: 'Playlists',
+      path: '/playlists',
+    },
+    { variant: 'profile', label: 'Perfil', path: '/profile' },
+  ];
 
   return (
     <NavBarContainer>
       <SpotifyLogo width="164px" height="49.06px" />
       <NavBarMainButtonsContainer>
-        <NavButton />
-        <NavButton />
-        <NavButton />
+        {navItems.map((item) => (
+          <NavButton
+            key={item.variant}
+            variant={item.variant}
+            isActive={activePage === item.variant}
+            onClick={() => navigate(item.path)}
+          >
+            {item.label}
+          </NavButton>
+        ))}
       </NavBarMainButtonsContainer>
     </NavBarContainer>
   );
