@@ -19,7 +19,7 @@ const Title = styled.h1`
   font-weight: 600;
 `;
 
-const Subtitle = styled.h3`
+const Subtitle = styled.h2`
   font-size: 16px;
   font-weight: 400;
   line-height: 18px;
