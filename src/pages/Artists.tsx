@@ -110,11 +110,12 @@ const Artists: React.FC = () => {
         {isLoading ? (
           <p>Carregando...</p>
         ) : (
-          topArtists.map((artist) => (
+          topArtists.map((artist, index) => (
             <ArtistListItem
               key={artist.id}
               profilePic={artist.images[0]?.url || ''}
               name={artist.name}
+              ranking={index + 1}
             />
           ))
         )}

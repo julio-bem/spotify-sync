@@ -4,6 +4,7 @@ import styled from 'styled-components';
 interface HeadingProps {
   profilePic: string;
   name: string;
+  ranking: number;
 }
 
 const ArtistListItemContainer = styled.div`
@@ -35,11 +36,33 @@ const ArtistProfilePicture = styled.img`
   object-position: center;
 `;
 
-const ArtistListItem: React.FC<HeadingProps> = ({ profilePic, name }) => {
+const ArtistListItem: React.FC<HeadingProps> = ({
+  profilePic,
+  name,
+  ranking,
+}) => {
+  const getRankingIcon = (ranking: number) => {
+    switch (ranking) {
+      case 1:
+        return '🥇';
+      case 2:
+        return '🥈';
+      case 3:
+        return '🥉';
+
+      default:
+        break;
+    }
+  };
+
   return (
     <ArtistListItemContainer>
       <ArtistProfilePicture src={profilePic} />
-      <ArtistName>{name}</ArtistName>
+      <ArtistName>
+        {name}
+        {` `}
+        {getRankingIcon(ranking)}
+      </ArtistName>
     </ArtistListItemContainer>
   );
 };
