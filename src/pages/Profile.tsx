@@ -3,6 +3,7 @@ import NavBar from '../components/NavBar';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import OrdinaryButton from '../components/OrdinaryButton';
+import { useAuth } from '../contexts/AuthContext';
 
 const PageContainer = styled.div`
   display: flex;
@@ -41,12 +42,14 @@ interface Profile {
 }
 
 const Profile: React.FC = () => {
+  const { accessToken } = useAuth();
   const navigate = useNavigate();
+
   const [isLoading, setIsLoading] = useState(true);
   const [currentProfile, setCurrentProfile] = useState<Profile>();
 
   const fetchUserProfile = useCallback(async () => {
-    const token = localStorage.getItem('accessToken');
+    const token = accessToken || localStorage.getItem('accessToken');
 
     try {
       const response = await fetch(`https://api.spotify.com/v1/me`, {

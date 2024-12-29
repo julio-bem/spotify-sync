@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { MdClose } from 'react-icons/md';
 import OrdinaryButton from './OrdinaryButton';
+import { useAuth } from '../contexts/AuthContext';
 
 interface CreatePlaylistModalProps {
   isVisible: boolean;
@@ -79,10 +80,12 @@ const CreatePlaylistModal: React.FC<CreatePlaylistModalProps> = ({
   currentPage,
   userId,
 }) => {
+  const { accessToken } = useAuth();
+
   const [playlistName, setPlaylistName] = useState('');
 
   const createPlaylist = (newPlaylistName: string, userId: string) => {
-    const token = localStorage.getItem('accessToken');
+    const token = accessToken || localStorage.getItem('accessToken');
 
     fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
       method: 'POST',

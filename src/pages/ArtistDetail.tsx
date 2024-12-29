@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import ArtistDetailHeader from '../components/ArtistDetailHeader';
 import AlbumListItem from '../components/AlbumListItem';
 import Pagination from '../components/Pagination';
+import { useAuth } from '../contexts/AuthContext';
 
 interface Album {
   name: string;
@@ -37,6 +38,7 @@ const AlbumListContainer = styled.div`
 
 const ArtistDetail: React.FC = () => {
   const { artist } = useArtist();
+  const { accessToken } = useAuth();
   const navigate = useNavigate();
 
   const [albums, setAlbums] = useState<Album[]>([]);
@@ -46,7 +48,7 @@ const ArtistDetail: React.FC = () => {
 
   const fetchArtistAlbums = useCallback(
     async (artistId: string, page: number) => {
-      const token = localStorage.getItem('accessToken');
+      const token = accessToken || localStorage.getItem('accessToken');
       const limit = 5;
       const offset = (page - 1) * limit;
 

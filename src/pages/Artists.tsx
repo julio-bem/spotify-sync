@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import ArtistListItem from '../components/ArtistListItem';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../components/Pagination';
+import { useAuth } from '../contexts/AuthContext';
 
 const PageContainer = styled.div`
   display: flex;
@@ -32,17 +33,18 @@ interface Artist {
 }
 
 const Artists: React.FC = () => {
+  const { accessToken } = useAuth();
+  const navigate = useNavigate();
+
   const [topArtists, setTopArtists] = useState<Artist[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const navigate = useNavigate();
-
   const fetchTopArtists = useCallback(
     async (page: number) => {
       setIsLoading(true);
-      const token = localStorage.getItem('accessToken');
+      const token = accessToken || localStorage.getItem('accessToken');
       const limit = 5;
       const offset = (page - 1) * limit;
 
