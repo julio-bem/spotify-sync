@@ -22,17 +22,29 @@ const Button = styled.button`
   border: none;
   cursor: pointer;
   &:disabled {
-    background-color: #ccc;
+    background-color: #949ea2;
     cursor: not-allowed;
   }
+
+  &:enabled:hover {
+    background-color: #1aa34a;
+    transition: background-color 0.2s ease;
+  }
+
+  border-radius: 15px;
 `;
 
 const PageButton = styled.button<{ active: boolean }>`
   padding: 8px 12px;
-  background-color: ${({ active }) => (active ? '#1db954' : '#fff')};
+  background-color: ${({ active }) => (active ? '#57B660' : '#fff')};
   color: ${({ active }) => (active ? '#fff' : '#000')};
-  border: 1px solid #1db954;
+  border: 1px solid #57b660;
   cursor: pointer;
+  border-radius: 15px;
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 const Pagination: React.FC<PaginationProps> = ({
