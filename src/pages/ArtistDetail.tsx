@@ -4,6 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import styled from 'styled-components';
 import ArtistDetailHeader from '../components/ArtistDetailHeader';
+import AlbumListItem from '../components/AlbumListItem';
+
+interface Album {
+  name: string;
+  images: { url: string }[];
+  id?: string;
+  release_date: string;
+  external_urls: { spotify: string };
+}
 
 const PageContainer = styled.div`
   display: flex;
@@ -22,6 +31,7 @@ const PaginationContainer = styled.div`
   justify-content: center;
   gap: 8px;
   margin-top: 16px;
+  max-width: 958px;
 `;
 
 const Button = styled.button`
@@ -56,16 +66,21 @@ const ArtistDetail: React.FC = () => {
   const { artist } = useArtist();
   const navigate = useNavigate();
 
-  const [albums, setAlbums] = useState([]);
+  const [albums, setAlbums] = useState<Album[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchArtistAlbums = useCallback(
-    async (artistId: string) => {
+    async (artistId: string, page: number) => {
       const token = localStorage.getItem('accessToken');
-      const limit = 50;
+      const limit = 5;
+      const offset = (page - 1) * limit;
 
       try {
+        setIsLoading(true);
         const response = await fetch(
-          `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=album&limit=${limit}`,
+          `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=album&limit=${limit}&offset=${offset}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -76,13 +91,16 @@ const ArtistDetail: React.FC = () => {
         if (response.ok) {
           const data = await response.json();
           setAlbums(data.items);
+          setTotalPages(Math.ceil(data.total / limit));
         } else if (response.status === 401) {
           navigate('/');
         } else {
-          console.error('Erro ao buscar os albums:', response.statusText);
+          console.error('Erro ao buscar os álbuns:', response.statusText);
         }
       } catch (error) {
         console.error('Erro na requisição:', error);
+      } finally {
+        setIsLoading(false);
       }
     },
     [navigate]
@@ -92,9 +110,17 @@ const ArtistDetail: React.FC = () => {
     if (!artist || !artist.id) {
       navigate('/artists');
     } else {
-      fetchArtistAlbums(artist.id);
+      fetchArtistAlbums(artist.id, currentPage);
     }
-  }, [artist, fetchArtistAlbums, navigate]);
+  }, [artist, currentPage, fetchArtistAlbums, navigate]);
+
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
 
   if (!artist) {
     return null;
@@ -106,10 +132,51 @@ const ArtistDetail: React.FC = () => {
       <PageMainContainer>
         <ArtistDetailHeader name={artist.name} profilePic={artist.profilePic} />
         <AlbumListContainer>
-          {albums.map((album) => (
-            <div key={album.id}>{album.name}</div>
-          ))}
+          {isLoading ? (
+            <p>Carregando...</p>
+          ) : (
+            albums.map((album) => {
+              const formattedReleaseDate = formatDate(album.release_date);
+              return (
+                <AlbumListItem
+                  albumPic={album.images[0]?.url || ''}
+                  albumRedirect={album.external_urls.spotify}
+                  name={album.name}
+                  releaseDate={formattedReleaseDate}
+                  key={album.id}
+                />
+              );
+            })
+          )}
         </AlbumListContainer>
+
+        <PaginationContainer>
+          <Button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            Anterior
+          </Button>
+
+          {Array.from({ length: totalPages }, (_, index) => (
+            <PageButton
+              key={index}
+              active={currentPage === index + 1}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </PageButton>
+          ))}
+
+          <Button
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+            disabled={currentPage === totalPages}
+          >
+            Próximo
+          </Button>
+        </PaginationContainer>
       </PageMainContainer>
     </PageContainer>
   );

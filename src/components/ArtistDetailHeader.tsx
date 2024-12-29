@@ -13,7 +13,6 @@ const ArtistDetailHeaderContainer = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 8px;
-  margin: 32px;
   height: 128px;
 `;
 
