@@ -3,6 +3,7 @@ import NavBar from '../components/NavBar';
 import PageHeading from '../components/PageHeading';
 import styled from 'styled-components';
 import ArtistListItem from '../components/ArtistListItem';
+import { useNavigate } from 'react-router-dom';
 
 const PageContainer = styled.div`
   display: flex;
@@ -62,6 +63,8 @@ const Artists: React.FC = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
+  const navigate = useNavigate();
+
   const fetchTopArtists = async (page: number) => {
     setIsLoading(true);
     const token = localStorage.getItem('accessToken');
@@ -81,6 +84,8 @@ const Artists: React.FC = () => {
       const data = await response.json();
       setTopArtists(data.items);
       setTotalPages(Math.ceil(data.total / limit));
+    } else if (response.status === 401) {
+      navigate('/');
     } else {
       console.error('Erro ao buscar os top artistas:', response.statusText);
     }
@@ -122,6 +127,7 @@ const Artists: React.FC = () => {
             topArtists.map((artist, index) => (
               <ArtistListItem
                 key={artist.id}
+                id={artist.id}
                 profilePic={artist.images[0]?.url || ''}
                 name={artist.name}
                 ranking={Number(`${currentPage - 1}${index + 1}`)}

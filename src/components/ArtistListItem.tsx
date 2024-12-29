@@ -1,7 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useArtist } from '../contexts/ArtistContext';
 
-interface HeadingProps {
+interface ArtistListItemProps {
+  id: string;
   profilePic: string;
   name: string;
   ranking: number;
@@ -35,11 +38,20 @@ const ArtistProfilePicture = styled.img`
   object-position: center;
 `;
 
-const ArtistListItem: React.FC<HeadingProps> = ({
+const ArtistListItem: React.FC<ArtistListItemProps> = ({
+  id,
   profilePic,
   name,
   ranking,
 }) => {
+  const navigate = useNavigate();
+  const { setArtist } = useArtist();
+
+  const handleClick = () => {
+    setArtist({ id, name, profilePic });
+    navigate(`/artist/${name.replace(' ', '+')}`);
+  };
+
   const getRankingIcon = (ranking: number) => {
     switch (ranking) {
       case 1:
@@ -48,14 +60,13 @@ const ArtistListItem: React.FC<HeadingProps> = ({
         return '🥈';
       case 3:
         return '🥉';
-
       default:
-        break;
+        return null;
     }
   };
 
   return (
-    <ArtistListItemContainer>
+    <ArtistListItemContainer onClick={handleClick}>
       <ArtistProfilePicture src={profilePic} />
       <ArtistName>
         {name}

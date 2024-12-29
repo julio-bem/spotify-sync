@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Artists from './pages/Artists';
+import { ArtistProvider } from './contexts/ArtistContext';
 
 const App: React.FC = () => {
   return (
@@ -10,7 +11,22 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/artists" element={<Artists />} />
+        <Route
+          path="/artists"
+          element={
+            <ArtistProvider>
+              <Artists />
+            </ArtistProvider>
+          }
+        />
+        {/* <Route
+          path="/artist/:name"
+          element={
+            <ArtistProvider>
+              <ArtistDetail />
+            </ArtistProvider>
+          }
+        /> */}
       </Routes>
     </Router>
   );
