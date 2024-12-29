@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface Artist {
   id: string;
@@ -6,28 +6,42 @@ interface Artist {
   profilePic: string;
 }
 
-interface ArtistContextProps {
+interface ArtistContextType {
   artist: Artist | null;
   setArtist: (artist: Artist) => void;
 }
 
-const ArtistContext = createContext<ArtistContextProps | undefined>(undefined);
+interface ArtistProviderTypes {
+  children: React.ReactElement;
+}
 
-export const ArtistProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
+const ArtistContext = createContext<ArtistContextType | undefined>(undefined);
+
+export const ArtistProvider: React.FC<ArtistProviderTypes> = ({ children }) => {
   const [artist, setArtist] = useState<Artist | null>(null);
 
+  useEffect(() => {
+    const storedArtist = localStorage.getItem('artist');
+    if (storedArtist) {
+      setArtist(JSON.parse(storedArtist));
+    }
+  }, []);
+
+  const updateArtist = (artist: Artist) => {
+    setArtist(artist);
+    localStorage.setItem('artist', JSON.stringify(artist));
+  };
+
   return (
-    <ArtistContext.Provider value={{ artist, setArtist }}>
+    <ArtistContext.Provider value={{ artist, setArtist: updateArtist }}>
       {children}
     </ArtistContext.Provider>
   );
 };
 
-export const useArtist = (): ArtistContextProps => {
+export const useArtist = () => {
   const context = useContext(ArtistContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useArtist must be used within an ArtistProvider');
   }
   return context;
