@@ -28,7 +28,7 @@ const PageMainContainer = styled.section`
 `;
 
 const AlbumListContainer = styled.div`
-  min-height: 400px;
+  min-height: 424px;
   display: flex;
   flex-direction: column;
   gap: 16px;

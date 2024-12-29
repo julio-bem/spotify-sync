@@ -51,7 +51,7 @@ const StyledButton = styled.button<ButtonProps>`
   }
 `;
 
-const Button: React.FC<ButtonProps> = ({
+const OrdinaryButton: React.FC<ButtonProps> = ({
   children,
   onClick,
   height,
@@ -80,4 +80,4 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export default Button;
+export default OrdinaryButton;
