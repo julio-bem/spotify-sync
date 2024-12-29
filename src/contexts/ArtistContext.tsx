@@ -29,7 +29,7 @@ export const ArtistProvider: React.FC<ArtistProviderTypes> = ({ children }) => {
 
   const updateArtist = (artist: Artist) => {
     setArtist(artist);
-    localStorage.setItem('artist', JSON.stringify(artist)); // Armazena no localStorage
+    localStorage.setItem('artist', JSON.stringify(artist));
   };
 
   return (

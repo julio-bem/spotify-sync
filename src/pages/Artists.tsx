@@ -76,8 +76,7 @@ const Artists: React.FC = () => {
 
   useEffect(() => {
     fetchTopArtists(currentPage);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  }, [currentPage, fetchTopArtists]);
 
   return (
     <PageContainer>

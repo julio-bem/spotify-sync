@@ -14,13 +14,14 @@ const ArtistDetailHeaderContainer = styled.div`
   align-items: center;
   gap: 8px;
   height: 128px;
+  margin: 0 32px;
 `;
 
 const Title = styled.h1`
-  font-size: 28px;
-  line-height: 32px;
-  font-weight: 600;
-  margin-right: 8px;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 700;
+  margin-left: 8px;
 `;
 
 const ArtistProfilePicture = styled.img`
@@ -45,7 +46,8 @@ const ArtistDetailHeader: React.FC<ArtistDetailProps> = ({
         size={32}
         onClick={() => navigate(-1)}
       />
-      <Title>{name}</Title> <ArtistProfilePicture src={profilePic} />
+      <Title>{name}</Title>
+      <ArtistProfilePicture src={profilePic} />
     </ArtistDetailHeaderContainer>
   );
 };

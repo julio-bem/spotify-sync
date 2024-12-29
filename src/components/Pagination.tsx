@@ -9,7 +9,7 @@ interface PaginationProps {
 
 const PaginationContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: start;
   gap: 8px;
   margin-top: 16px;
   max-width: 958px;

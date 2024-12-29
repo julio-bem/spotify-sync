@@ -14,6 +14,8 @@ const AlbumListItemContainer = styled.div`
   gap: 16px;
   cursor: pointer;
   align-items: center;
+  width: 100%;
+  max-width: 958px;
   transition: transform 0.1s ease;
 
   &:hover {
