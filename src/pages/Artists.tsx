@@ -4,6 +4,7 @@ import PageHeading from '../components/PageHeading';
 import styled from 'styled-components';
 import ArtistListItem from '../components/ArtistListItem';
 import { useNavigate } from 'react-router-dom';
+import Pagination from '../components/Pagination';
 
 const PageContainer = styled.div`
   display: flex;
@@ -14,33 +15,6 @@ const PageMainContainer = styled.section`
   display: flex;
   flex-direction: column;
   gap: 16px;
-`;
-
-const PaginationContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 16px;
-`;
-
-const Button = styled.button`
-  padding: 8px 16px;
-  background-color: #1db954;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-`;
-
-const PageButton = styled.button<{ active: boolean }>`
-  padding: 8px 12px;
-  background-color: ${({ active }) => (active ? '#1db954' : '#fff')};
-  color: ${({ active }) => (active ? '#fff' : '#000')};
-  border: 1px solid #1db954;
-  cursor: pointer;
 `;
 
 const ArtistListContainer = styled.div`
@@ -105,22 +79,6 @@ const Artists: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const handlePageClick = (page: number) => {
-    setCurrentPage(page);
-  };
-
   return (
     <PageContainer>
       <NavBar activePage="artists" />
@@ -144,26 +102,11 @@ const Artists: React.FC = () => {
             ))
           )}
         </ArtistListContainer>
-        <PaginationContainer>
-          <Button onClick={handlePreviousPage} disabled={currentPage === 1}>
-            Anterior
-          </Button>
-          {[...Array(totalPages)].map((_, index) => (
-            <PageButton
-              key={index + 1}
-              active={currentPage === index + 1}
-              onClick={() => handlePageClick(index + 1)}
-            >
-              {index + 1}
-            </PageButton>
-          ))}
-          <Button
-            onClick={handleNextPage}
-            disabled={currentPage === totalPages}
-          >
-            Próxima
-          </Button>
-        </PaginationContainer>
+        <Pagination
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+          totalPages={totalPages}
+        />
       </PageMainContainer>
     </PageContainer>
   );
