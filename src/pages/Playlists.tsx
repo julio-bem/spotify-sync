@@ -7,6 +7,7 @@ import Pagination from '../components/Pagination';
 import OrdinaryButton from '../components/OrdinaryButton';
 import PlaylistListItem from '../components/PlaylistListItem';
 import CreatePlaylistModal from '../components/CreatePlaylistModal';
+import { useAuth } from '../contexts/AuthContext';
 
 const PageContainer = styled.div`
   display: flex;
@@ -46,18 +47,19 @@ interface Playlist {
 }
 
 const Playlists: React.FC = () => {
+  const { accessToken } = useAuth();
+  const navigate = useNavigate();
+
   const [topPlaylists, setTopPlaylists] = useState<Playlist[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const navigate = useNavigate();
-
   const fetchPlaylists = useCallback(
     async (page: number) => {
       setIsLoading(true);
-      const token = localStorage.getItem('accessToken');
+      const token = accessToken || localStorage.getItem('accessToken');
       const limit = 5;
       const offset = (page - 1) * limit;
 
