@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import NavBar from '../components/NavBar';
 import PageHeading from '../components/PageHeading';
 import styled from 'styled-components';
@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 import OrdinaryButton from '../components/OrdinaryButton';
 import PlaylistListItem from '../components/PlaylistListItem';
+import CreatePlaylistModal from '../components/CreatePlaylistModal';
 
 const PageContainer = styled.div`
   display: flex;
@@ -41,7 +42,7 @@ interface Playlist {
   id: string;
   images: { url: string }[];
   external_urls: { spotify: string };
-  owner: { display_name: string };
+  owner: { display_name: string; id: string };
 }
 
 const Playlists: React.FC = () => {
@@ -49,6 +50,7 @@ const Playlists: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const navigate = useNavigate();
 
@@ -76,10 +78,7 @@ const Playlists: React.FC = () => {
         } else if (response.status === 401) {
           navigate('/');
         } else {
-          console.error(
-            'Erro ao buscar as playlists:',
-            response.statusText
-          );
+          console.error('Erro ao buscar as playlists:', response.statusText);
         }
       } catch (error) {
         console.error('Erro na requisição:', error);
@@ -103,7 +102,11 @@ const Playlists: React.FC = () => {
             title="Minhas Playlists"
             subtitle="Sua coleção pessoal de playlists"
           />
-          <OrdinaryButton width="185px" height="42px">
+          <OrdinaryButton
+            width="185px"
+            height="42px"
+            onClick={() => setIsModalVisible(true)}
+          >
             Criar playlist
           </OrdinaryButton>
         </PageHeader>
@@ -116,7 +119,7 @@ const Playlists: React.FC = () => {
                 key={playlist.id}
                 owner={playlist.owner.display_name}
                 name={playlist.name}
-                playlistPic={playlist.images[0]?.url || ''}
+                playlistPic={playlist?.images ? playlist?.images[0]?.url : ''}
                 playlistRedirect={playlist.external_urls.spotify}
               />
             ))
@@ -128,6 +131,15 @@ const Playlists: React.FC = () => {
           totalPages={totalPages}
         />
       </PageMainContainer>
+
+      <CreatePlaylistModal
+        isVisible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        setIsModalVisible={setIsModalVisible}
+        fetchPlaylists={fetchPlaylists}
+        currentPage={currentPage}
+        userId={topPlaylists?.length > 0 ? topPlaylists[0].owner.id : ''}
+      />
     </PageContainer>
   );
 };

@@ -12,6 +12,7 @@ interface ButtonProps {
   fontWeight?: string;
   lineHeight?: string;
   borderRadius?: string;
+  disabled?: boolean;
 }
 
 const StyledButton = styled.button<ButtonProps>`
@@ -30,7 +31,12 @@ const StyledButton = styled.button<ButtonProps>`
     background-color 0.3s ease,
     transform 0.3s ease;
 
-  &:hover {
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  &:enabled:hover {
     transform: scale(1.05);
   }
 
@@ -62,6 +68,7 @@ const OrdinaryButton: React.FC<ButtonProps> = ({
   fontWeight,
   lineHeight,
   borderRadius,
+  disabled,
 }) => {
   return (
     <StyledButton
@@ -74,6 +81,7 @@ const OrdinaryButton: React.FC<ButtonProps> = ({
       lineHeight={lineHeight}
       borderRadius={borderRadius}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </StyledButton>
