@@ -38,6 +38,7 @@ const ModalContainer = styled.div`
 
 const CloseIconContainer = styled.div`
   margin-left: auto;
+  cursor: pointer;
 `;
 
 const MainContentContainer = styled.div`
@@ -112,11 +113,19 @@ const CreatePlaylistModal: React.FC<CreatePlaylistModalProps> = ({
     setPlaylistName('');
   };
 
+  const handleOverlayClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   if (!isVisible) return null;
 
   return (
-    <ModalOverlay>
-      <ModalContainer>
+    <ModalOverlay onClick={handleOverlayClick}>
+      <ModalContainer onClick={(e) => e.stopPropagation()}>
         <CloseIconContainer>
           <MdClose onClick={onClose} size={32} />
         </CloseIconContainer>
