@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import NavBar from '../components/NavBar';
 import PageHeading from '../components/PageHeading';
 import styled from 'styled-components';
@@ -65,35 +65,44 @@ const Artists: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const fetchTopArtists = async (page: number) => {
-    setIsLoading(true);
-    const token = localStorage.getItem('accessToken');
-    const limit = 5;
-    const offset = (page - 1) * limit;
+  const fetchTopArtists = useCallback(
+    async (page: number) => {
+      setIsLoading(true);
+      const token = localStorage.getItem('accessToken');
+      const limit = 5;
+      const offset = (page - 1) * limit;
 
-    const response = await fetch(
-      `https://api.spotify.com/v1/me/top/artists?limit=${limit}&offset=${offset}&time_range=medium_term`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      try {
+        const response = await fetch(
+          `https://api.spotify.com/v1/me/top/artists?limit=${limit}&offset=${offset}&time_range=medium_term`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setTopArtists(data.items);
+          setTotalPages(Math.ceil(data.total / limit));
+        } else if (response.status === 401) {
+          navigate('/');
+        } else {
+          console.error('Erro ao buscar os top artistas:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Erro na requisição:', error);
+      } finally {
+        setIsLoading(false);
       }
-    );
-
-    if (response.ok) {
-      const data = await response.json();
-      setTopArtists(data.items);
-      setTotalPages(Math.ceil(data.total / limit));
-    } else if (response.status === 401) {
-      navigate('/');
-    } else {
-      console.error('Erro ao buscar os top artistas:', response.statusText);
-    }
-    setIsLoading(false);
-  };
+    },
+    [navigate]
+  );
 
   useEffect(() => {
     fetchTopArtists(currentPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
   const handleNextPage = () => {

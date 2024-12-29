@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Artists from './pages/Artists';
 import { ArtistProvider } from './contexts/ArtistContext';
+import ArtistDetail from './pages/ArtistDetail';
 
 const App: React.FC = () => {
   return (
@@ -19,14 +20,14 @@ const App: React.FC = () => {
             </ArtistProvider>
           }
         />
-        {/* <Route
+        <Route
           path="/artist/:name"
           element={
             <ArtistProvider>
               <ArtistDetail />
             </ArtistProvider>
           }
-        /> */}
+        />
       </Routes>
     </Router>
   );
