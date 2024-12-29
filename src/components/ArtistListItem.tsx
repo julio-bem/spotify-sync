@@ -13,7 +13,6 @@ const ArtistListItemContainer = styled.div`
   gap: 16px;
   cursor: pointer;
   align-items: center;
-  margin: 0 32px;
   transition: transform 0.1s ease;
 
   &:hover {

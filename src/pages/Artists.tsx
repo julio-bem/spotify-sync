@@ -42,6 +42,14 @@ const PageButton = styled.button<{ active: boolean }>`
   cursor: pointer;
 `;
 
+const ArtistListContainer = styled.div`
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 32px;
+`;
+
 interface Artist {
   id: string;
   name: string;
@@ -107,18 +115,20 @@ const Artists: React.FC = () => {
           title="Top Artistas"
           subtitle="Aqui você encontra seus artistas preferidos"
         />
-        {isLoading ? (
-          <p>Carregando...</p>
-        ) : (
-          topArtists.map((artist, index) => (
-            <ArtistListItem
-              key={artist.id}
-              profilePic={artist.images[0]?.url || ''}
-              name={artist.name}
-              ranking={index + 1}
-            />
-          ))
-        )}
+        <ArtistListContainer>
+          {isLoading ? (
+            <p>Carregando...</p>
+          ) : (
+            topArtists.map((artist, index) => (
+              <ArtistListItem
+                key={artist.id}
+                profilePic={artist.images[0]?.url || ''}
+                name={artist.name}
+                ranking={Number(`${currentPage - 1}${index + 1}`)}
+              />
+            ))
+          )}
+        </ArtistListContainer>
         <PaginationContainer>
           <Button onClick={handlePreviousPage} disabled={currentPage === 1}>
             Anterior
