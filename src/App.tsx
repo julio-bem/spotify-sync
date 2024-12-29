@@ -6,6 +6,7 @@ import Artists from './pages/Artists';
 import { ArtistProvider } from './contexts/ArtistContext';
 import ArtistDetail from './pages/ArtistDetail';
 import Playlists from './pages/Playlists';
+import Profile from './pages/Profile';
 
 const App: React.FC = () => {
   return (
@@ -30,6 +31,7 @@ const App: React.FC = () => {
           }
         />
         <Route path="/playlists" element={<Playlists />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );
