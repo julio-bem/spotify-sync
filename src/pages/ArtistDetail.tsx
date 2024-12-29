@@ -1,6 +1,56 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useArtist } from '../contexts/ArtistContext';
 import { useNavigate } from 'react-router-dom';
+import NavBar from '../components/NavBar';
+import styled from 'styled-components';
+import ArtistDetailHeader from '../components/ArtistDetailHeader';
+
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const PageMainContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+`;
+
+const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+`;
+
+const Button = styled.button`
+  padding: 8px 16px;
+  background-color: #1db954;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+`;
+
+const PageButton = styled.button<{ active: boolean }>`
+  padding: 8px 12px;
+  background-color: ${({ active }) => (active ? '#1db954' : '#fff')};
+  color: ${({ active }) => (active ? '#fff' : '#000')};
+  border: 1px solid #1db954;
+  cursor: pointer;
+`;
+
+const AlbumListContainer = styled.div`
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 32px;
+`;
 
 const ArtistDetail: React.FC = () => {
   const { artist } = useArtist();
@@ -42,24 +92,26 @@ const ArtistDetail: React.FC = () => {
     if (!artist || !artist.id) {
       navigate('/artists');
     } else {
-      fetchArtistAlbums(artist.id); 
+      fetchArtistAlbums(artist.id);
     }
   }, [artist, fetchArtistAlbums, navigate]);
 
   if (!artist) {
-    return null; 
+    return null;
   }
 
   return (
-    <div>
-      <button onClick={() => navigate(-1)}>Voltar</button>
-      <h1>{artist.name}</h1>
-      <img src={artist.profilePic} alt={artist.name} />
-      <p>ID: {artist.id}</p>
-      {albums.map((album) => (
-        <div key={album.id}>{album.name}</div>
-      ))}
-    </div>
+    <PageContainer>
+      <NavBar activePage="artists" />
+      <PageMainContainer>
+        <ArtistDetailHeader name={artist.name} profilePic={artist.profilePic} />
+        <AlbumListContainer>
+          {albums.map((album) => (
+            <div key={album.id}>{album.name}</div>
+          ))}
+        </AlbumListContainer>
+      </PageMainContainer>
+    </PageContainer>
   );
 };
 
