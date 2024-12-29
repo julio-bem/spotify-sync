@@ -16,6 +16,7 @@ const NavBar: React.FC<NavBarProps> = ({ activePage }) => {
     background-color: #000;
     height: 100vh;
     width: 250px;
+    min-width: 250px;
     padding: 31.04px 30px 14px;
     display: flex;
     flex-direction: column;
