@@ -78,6 +78,7 @@ const Playlists: React.FC = () => {
           setTopPlaylists(data.items);
           setTotalPages(Math.ceil(data.total / limit));
         } else if (response.status === 401) {
+          localStorage.clear();
           navigate('/');
         } else {
           console.error('Erro ao buscar as playlists:', response.statusText);

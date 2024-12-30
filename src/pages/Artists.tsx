@@ -63,6 +63,7 @@ const Artists: React.FC = () => {
           setTopArtists(data.items);
           setTotalPages(Math.ceil(data.total / limit));
         } else if (response.status === 401) {
+          localStorage.clear();
           navigate('/');
         } else {
           console.error('Erro ao buscar os top artistas:', response.statusText);

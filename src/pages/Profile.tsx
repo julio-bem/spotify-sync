@@ -63,6 +63,7 @@ const Profile: React.FC = () => {
         const data = await response.json();
         setCurrentProfile(data);
       } else if (response.status === 401) {
+        localStorage.clear();
         navigate('/');
       } else {
         console.error('Erro ao buscar perfil:', response.statusText);
