@@ -127,8 +127,11 @@ const CreatePlaylistModal: React.FC<CreatePlaylistModalProps> = ({
   if (!isVisible) return null;
 
   return (
-    <ModalOverlay onClick={handleOverlayClick}>
-      <ModalContainer onClick={(e) => e.stopPropagation()}>
+    <ModalOverlay onClick={handleOverlayClick} data-testid="modal-overlay">
+      <ModalContainer
+        onClick={(e) => e.stopPropagation()}
+        data-testid="modal-container"
+      >
         <CloseIconContainer>
           <MdClose onClick={onClose} size={32} />
         </CloseIconContainer>

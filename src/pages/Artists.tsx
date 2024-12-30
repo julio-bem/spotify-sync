@@ -73,7 +73,7 @@ const Artists: React.FC = () => {
         setIsLoading(false);
       }
     },
-    [navigate]
+    [accessToken, navigate]
   );
 
   useEffect(() => {

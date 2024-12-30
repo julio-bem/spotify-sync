@@ -48,12 +48,12 @@ const ArtistDetail: React.FC = () => {
 
   const fetchArtistAlbums = useCallback(
     async (artistId: string, page: number) => {
+      setIsLoading(true);
       const token = accessToken || localStorage.getItem('accessToken');
       const limit = 5;
       const offset = (page - 1) * limit;
 
       try {
-        setIsLoading(true);
         const response = await fetch(
           `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=album&limit=${limit}&offset=${offset}`,
           {
@@ -78,7 +78,7 @@ const ArtistDetail: React.FC = () => {
         setIsLoading(false);
       }
     },
-    [navigate]
+    [accessToken, navigate]
   );
 
   useEffect(() => {
