@@ -71,7 +71,7 @@ const Profile: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [navigate]);
+  }, [accessToken, navigate]);
 
   const handleLogout = () => {
     localStorage.clear();
