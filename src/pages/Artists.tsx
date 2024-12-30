@@ -67,10 +67,10 @@ const Artists: React.FC = () => {
         } else {
           console.error('Erro ao buscar os top artistas:', response.statusText);
         }
+
+        setIsLoading(false);
       } catch (error) {
         console.error('Erro na requisição:', error);
-      } finally {
-        setIsLoading(false);
       }
     },
     [accessToken, navigate]

@@ -20,7 +20,8 @@ export default defineConfig({
         name: 'Spotify Sync',
         short_name: 'Spotify Sync',
         description: 'Sincronização e exibição de estatísticas do Spotify',
-        theme_color: '#000',
+        theme_color: '#fff',
+        background_color: "#000",
         icons: [
           {
             src: "pwa-64x64.png",
@@ -45,6 +46,19 @@ export default defineConfig({
           }
         ],
       },
+      workbox: {
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.hostname.includes('api.spotify.com'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-cache',
+              cacheableResponse: {
+                statuses: [0, 200],
+            }
+          }
+        }]
+      }
     })
   ],
   server: {
