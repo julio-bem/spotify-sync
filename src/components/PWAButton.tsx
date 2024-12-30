@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PWAIcon from '../assets/icons/pwa-icon.svg?react';
 
@@ -6,7 +7,7 @@ interface PWAButtonProps {
   onClick: () => void;
 }
 
-const PWAButtonContainer = styled.div`
+const PWAButtonContainer = styled.button`
   display: flex;
   flex-direction: row;
   gap: 26px;
@@ -33,9 +34,41 @@ const Text = styled.p`
   line-height: 13.74px;
 `;
 
-const PWAButton: React.FC<PWAButtonProps> = ({ onClick }) => {
+const PWAButton: React.FC<PWAButtonProps> = () => {
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
+  useEffect(() => {
+    // Detectando o evento 'beforeinstallprompt'
+    const handleBeforeInstallPrompt = (e: any) => {
+      e.preventDefault(); // Impede o navegador de exibir o prompt automaticamente
+      setDeferredPrompt(e); // Armazena o evento para exibição posterior
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener(
+        'beforeinstallprompt',
+        handleBeforeInstallPrompt
+      );
+    };
+  }, []);
+
+  const handleInstallClick = () => {
+    if (deferredPrompt) {
+      // Exibe o prompt de instalação
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult: any) => {
+        console.log(choiceResult.outcome); // Registra a escolha do usuário (aceitar ou cancelar)
+        setDeferredPrompt(null); // Limpa o evento após a escolha
+      });
+    } else {
+      console.log('O PWA não está pronto para instalação.');
+    }
+  };
+
   return (
-    <PWAButtonContainer onClick={onClick}>
+    <PWAButtonContainer onClick={handleInstallClick}>
       <StyledIcon />
       <Text>Instalar PWA</Text>
     </PWAButtonContainer>

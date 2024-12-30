@@ -68,6 +68,7 @@ const ArtistDetail: React.FC = () => {
           setAlbums(data.items);
           setTotalPages(Math.ceil(data.total / limit));
         } else if (response.status === 401) {
+          localStorage.clear();
           navigate('/');
         } else {
           console.error('Erro ao buscar os álbuns:', response.statusText);
