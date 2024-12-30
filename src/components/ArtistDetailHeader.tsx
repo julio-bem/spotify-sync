@@ -40,7 +40,7 @@ const ArtistDetailHeader: React.FC<ArtistDetailProps> = ({
   const navigate = useNavigate();
 
   return (
-    <ArtistDetailHeaderContainer>
+    <ArtistDetailHeaderContainer data-testid="artist-details">
       <IoArrowBackOutline
         cursor="pointer"
         size={32}

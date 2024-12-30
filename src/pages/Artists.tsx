@@ -88,7 +88,7 @@ const Artists: React.FC = () => {
           title="Top Artistas"
           subtitle="Aqui você encontra seus artistas preferidos"
         />
-        <ArtistListContainer>
+        <ArtistListContainer data-testid="artist-list">
           {isLoading ? (
             <p>Carregando...</p>
           ) : (

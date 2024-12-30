@@ -66,7 +66,7 @@ const ArtistListItem: React.FC<ArtistListItemProps> = ({
   };
 
   return (
-    <ArtistListItemContainer onClick={handleClick}>
+    <ArtistListItemContainer data-testid="artist-item" onClick={handleClick}>
       <ArtistProfilePicture src={profilePic} />
       <ArtistName>
         {name}
