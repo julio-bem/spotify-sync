@@ -17,7 +17,7 @@ const PaginationContainer = styled.div`
 
 const Button = styled.button`
   padding: 8px 16px;
-  background-color: #1db954;
+  background-color: #006600;
   color: #fff;
   border: none;
   cursor: pointer;
@@ -27,7 +27,7 @@ const Button = styled.button`
   }
 
   &:enabled:hover {
-    background-color: #1aa34a;
+    background-color: #005700;
     transition: background-color 0.2s ease;
   }
 
@@ -36,9 +36,9 @@ const Button = styled.button`
 
 const PageButton = styled.button<{ active: boolean }>`
   padding: 8px 12px;
-  background-color: ${({ active }) => (active ? '#57B660' : '#fff')};
+  background-color: ${({ active }) => (active ? '#006600' : '#fff')};
   color: ${({ active }) => (active ? '#fff' : '#000')};
-  border: 1px solid #57b660;
+  border: 1px solid #006600;
   cursor: pointer;
   border-radius: 15px;
 

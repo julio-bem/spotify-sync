@@ -63,7 +63,11 @@ const PlaylistListItem: React.FC<PlaylistListItemProps> = ({
 
   return (
     <PlaylistListItemContainer data-testid="playlist-list-item">
-      <PlaylistPicture src={playlistPic} />
+      <PlaylistPicture
+        src={playlistPic}
+        alt="Imagem da playlist"
+        loading="lazy"
+      />
       <PlaylistDetails onClick={openPlaylist}>
         <PlaylistName>{name}</PlaylistName>
         <PlaylistOwner>{owner}</PlaylistOwner>
