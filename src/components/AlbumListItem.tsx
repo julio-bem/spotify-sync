@@ -62,7 +62,7 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({
   };
 
   return (
-    <AlbumListItemContainer>
+    <AlbumListItemContainer data-testid="album">
       <AlbumPicture src={albumPic} />
       <AlbumDetails onClick={openAlbum}>
         <AlbumName>{name}</AlbumName>

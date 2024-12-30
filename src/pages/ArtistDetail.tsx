@@ -106,7 +106,7 @@ const ArtistDetail: React.FC = () => {
       <NavBar activePage="artists" />
       <PageMainContainer>
         <ArtistDetailHeader name={artist.name} profilePic={artist.profilePic} />
-        <AlbumListContainer>
+        <AlbumListContainer data-testid="album-list">
           {isLoading ? (
             <p>Carregando...</p>
           ) : (
