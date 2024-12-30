@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './pages/Login';
-import Home from './pages/Home';
-import Artists from './pages/Artists';
 import { ArtistProvider } from './contexts/ArtistContext';
-import ArtistDetail from './pages/ArtistDetail';
-import Playlists from './pages/Playlists';
-import Profile from './pages/Profile';
+
+const Home = lazy(() => import('./pages/Home'));
+const ArtistDetail = lazy(() => import('./pages/ArtistDetail'));
+const Playlists = lazy(() => import('./pages/Playlists'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Artists = lazy(() => import('./pages/Artists'));
+const Login = lazy(() => import('./pages/Login'));
 
 const App: React.FC = () => {
   return (

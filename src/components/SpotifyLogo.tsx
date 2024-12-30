@@ -18,6 +18,7 @@ const SpotifyLogo: React.FC<LogoProps> = ({ onClick, height, width }) => {
   return (
     <StyledSpotifyLogo
       src={spotifyLogo}
+      alt="Logo do spotify"
       height={height}
       width={width}
       onClick={onClick}

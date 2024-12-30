@@ -47,7 +47,10 @@ const ArtistDetailHeader: React.FC<ArtistDetailProps> = ({
         onClick={() => navigate(-1)}
       />
       <Title>{name}</Title>
-      <ArtistProfilePicture src={profilePic} />
+      <ArtistProfilePicture
+        src={profilePic}
+        alt="Imagem de perfil do artista"
+      />
     </ArtistDetailHeaderContainer>
   );
 };

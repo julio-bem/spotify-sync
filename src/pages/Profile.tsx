@@ -92,7 +92,10 @@ const Profile: React.FC = () => {
           <p>Carregando...</p>
         ) : currentProfile ? (
           <>
-            <ProfileAvatar src={currentProfile.images[0].url} />
+            <ProfileAvatar
+              src={currentProfile.images[0].url}
+              alt="Imagem de perfil do usuário"
+            />
             <ProfileTitle>{currentProfile.display_name}</ProfileTitle>
             <OrdinaryButton
               fontWeight="700"

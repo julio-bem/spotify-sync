@@ -16,6 +16,8 @@
 
 # misc
 .DS_Store
+/dist
+/dev-dist
 .env.local
 .env.development.local
 .env.test.local
