@@ -82,13 +82,13 @@ const Playlists: React.FC = () => {
         } else {
           console.error('Erro ao buscar as playlists:', response.statusText);
         }
+
+        setIsLoading(false);
       } catch (error) {
         console.error('Erro na requisição:', error);
-      } finally {
-        setIsLoading(false);
       }
     },
-    [navigate]
+    [accessToken, navigate]
   );
 
   useEffect(() => {

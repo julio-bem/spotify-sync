@@ -52,6 +52,31 @@ const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
 }) => {
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    const maxPagesToShow = 5;
+    let startPage = Math.max(currentPage - Math.floor(maxPagesToShow / 2), 1);
+    const endPage = Math.min(startPage + maxPagesToShow - 1, totalPages);
+
+    if (endPage - startPage + 1 < maxPagesToShow) {
+      startPage = Math.max(endPage - maxPagesToShow + 1, 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(
+        <PageButton
+          key={i}
+          active={currentPage === i}
+          onClick={() => setCurrentPage(i)}
+        >
+          {i}
+        </PageButton>
+      );
+    }
+
+    return pageNumbers;
+  };
+
   return (
     <PaginationContainer>
       <Button
@@ -61,15 +86,7 @@ const Pagination: React.FC<PaginationProps> = ({
         Anterior
       </Button>
 
-      {Array.from({ length: totalPages }, (_, index) => (
-        <PageButton
-          key={index}
-          active={currentPage === index + 1}
-          onClick={() => setCurrentPage(index + 1)}
-        >
-          {index + 1}
-        </PageButton>
-      ))}
+      {renderPageNumbers()}
 
       <Button
         onClick={() =>

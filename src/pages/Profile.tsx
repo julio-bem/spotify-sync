@@ -45,10 +45,11 @@ const Profile: React.FC = () => {
   const { accessToken } = useAuth();
   const navigate = useNavigate();
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [currentProfile, setCurrentProfile] = useState<Profile>();
 
   const fetchUserProfile = useCallback(async () => {
+    setIsLoading(true);
     const token = accessToken || localStorage.getItem('accessToken');
 
     try {
@@ -66,10 +67,10 @@ const Profile: React.FC = () => {
       } else {
         console.error('Erro ao buscar perfil:', response.statusText);
       }
+
+      setIsLoading(false);
     } catch (error) {
       console.error('Erro na requisição:', error);
-    } finally {
-      setIsLoading(false);
     }
   }, [accessToken, navigate]);
 
