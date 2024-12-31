@@ -8,9 +8,9 @@ interface AuthContextType {
 }
 
 interface SpotifyAuthParams {
-  access_token: string;
-  expires_in: string;
-  token_type: string;
+  access_token: string | null;
+  expires_in: string | null;
+  token_type: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);

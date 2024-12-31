@@ -47,7 +47,7 @@ interface Playlist {
 }
 
 const Playlists: React.FC = () => {
-  const { accessToken } = useAuth();
+  const { accessToken, setAuthInfo } = useAuth();
   const navigate = useNavigate();
 
   const [topPlaylists, setTopPlaylists] = useState<Playlist[]>([]);
@@ -79,6 +79,11 @@ const Playlists: React.FC = () => {
           setTotalPages(Math.ceil(data.total / limit));
         } else if (response.status === 401) {
           localStorage.clear();
+          setAuthInfo({
+            access_token: null,
+            expires_in: null,
+            token_type: null,
+          });
           navigate('/');
         } else {
           console.error('Erro ao buscar as playlists:', response.statusText);
@@ -89,7 +94,7 @@ const Playlists: React.FC = () => {
         console.error('Erro na requisição:', error);
       }
     },
-    [accessToken, navigate]
+    [accessToken, navigate, setAuthInfo]
   );
 
   useEffect(() => {

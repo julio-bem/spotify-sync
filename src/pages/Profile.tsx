@@ -42,7 +42,7 @@ interface Profile {
 }
 
 const Profile: React.FC = () => {
-  const { accessToken } = useAuth();
+  const { accessToken, setAuthInfo } = useAuth();
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -64,6 +64,11 @@ const Profile: React.FC = () => {
         setCurrentProfile(data);
       } else if (response.status === 401) {
         localStorage.clear();
+        setAuthInfo({
+          access_token: null,
+          expires_in: null,
+          token_type: null,
+        });
         navigate('/');
       } else {
         console.error('Erro ao buscar perfil:', response.statusText);
@@ -73,10 +78,16 @@ const Profile: React.FC = () => {
     } catch (error) {
       console.error('Erro na requisição:', error);
     }
-  }, [accessToken, navigate]);
+  }, [accessToken, navigate, setAuthInfo]);
 
   const handleLogout = () => {
     localStorage.clear();
+
+    setAuthInfo({
+      access_token: null,
+      expires_in: null,
+      token_type: null,
+    });
 
     navigate('/');
   };
