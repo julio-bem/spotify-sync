@@ -8,6 +8,7 @@ import OrdinaryButton from '../components/OrdinaryButton';
 import PlaylistListItem from '../components/PlaylistListItem';
 import CreatePlaylistModal from '../components/CreatePlaylistModal';
 import { useAuth } from '../contexts/AuthContext';
+import OrdinaryText from '../components/OrdinaryText';
 
 const PageContainer = styled.div`
   display: flex;
@@ -133,7 +134,7 @@ const Playlists: React.FC = () => {
         </PageHeader>
         <PlaylistListContainer>
           {isLoading ? (
-            <p>Carregando...</p>
+            <OrdinaryText>Carregando...</OrdinaryText>
           ) : (
             topPlaylists.map((playlist) => (
               <PlaylistListItem

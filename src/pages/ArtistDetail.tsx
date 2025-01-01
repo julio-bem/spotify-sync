@@ -7,6 +7,7 @@ import ArtistDetailHeader from '../components/ArtistDetailHeader';
 import AlbumListItem from '../components/AlbumListItem';
 import Pagination from '../components/Pagination';
 import { useAuth } from '../contexts/AuthContext';
+import OrdinaryText from '../components/OrdinaryText';
 
 interface Album {
   name: string;
@@ -114,7 +115,7 @@ const ArtistDetail: React.FC = () => {
         <ArtistDetailHeader name={artist.name} profilePic={artist.profilePic} />
         <AlbumListContainer data-testid="album-list">
           {isLoading ? (
-            <p>Carregando...</p>
+            <OrdinaryText>Carregando...</OrdinaryText>
           ) : (
             albums.map((album) => {
               const formattedReleaseDate = formatDate(album.release_date);

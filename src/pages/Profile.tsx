@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import OrdinaryButton from '../components/OrdinaryButton';
 import { useAuth } from '../contexts/AuthContext';
+import OrdinaryText from '../components/OrdinaryText';
 
 const PageContainer = styled.div`
   display: flex;
@@ -17,6 +18,11 @@ const PageMainContainer = styled.section`
   justify-content: center;
   gap: 24px;
   width: 100%;
+
+  @media (max-width: 767px) {
+    margin-top: 60px;
+    height: calc(100vh - 60px);
+  }
 `;
 
 const ProfileAvatar = styled.img`
@@ -101,7 +107,7 @@ const Profile: React.FC = () => {
       <NavBar activePage="profile" />
       <PageMainContainer>
         {isLoading ? (
-          <p>Carregando...</p>
+          <OrdinaryText>Carregando...</OrdinaryText>
         ) : currentProfile ? (
           <>
             <ProfileAvatar
@@ -119,7 +125,7 @@ const Profile: React.FC = () => {
             </OrdinaryButton>
           </>
         ) : (
-          <p>Erro ao obter dados</p>
+          <OrdinaryText>Erro ao obter dados</OrdinaryText>
         )}
       </PageMainContainer>
     </PageContainer>
