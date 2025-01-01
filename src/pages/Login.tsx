@@ -5,6 +5,7 @@ import SpotifyLogo from '../components/SpotifyLogo';
 import styled from 'styled-components';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import useMediaQuery from '../hooks/useMediaQuery';
 
 const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 const SPOTIFY_AUTHORIZE_ENDPOINT = import.meta.env
@@ -18,7 +19,8 @@ const Login: React.FC = () => {
   const { accessToken } = useAuth();
   const navigate = useNavigate();
   const token = accessToken || localStorage.getItem('accessToken');
-  console.log('🚀 ~ token:', token);
+  const mediaQuery = useMediaQuery();
+  console.log('🚀 ~ mediaQuery:', mediaQuery);
 
   const handleLogin = () => {
     if (token) {
@@ -42,15 +44,27 @@ const Login: React.FC = () => {
     gap: 16px;
     height: 100vh;
     width: 100vw;
+
+    @media (max-width: 767px) {
+      padding: 0 20px;
+      gap: 24px;
+    }
   `;
 
   return (
     <LoginContainer>
       <SpotifyLogo width="164px" height="49.06px" />
-      <OrdinaryText fontWeight="600">
+      <OrdinaryText
+        fontWeight="600"
+        textAlign={mediaQuery === 'mobile' ? 'center' : 'left'}
+      >
         Entra com sua conta Spotify clicando no botão abaixo
       </OrdinaryText>
-      <OrdinaryButton width="133px" height="42px" onClick={handleLogin}>
+      <OrdinaryButton
+        width={mediaQuery === 'mobile' ? ' 150px' : '133px'}
+        height="42px"
+        onClick={handleLogin}
+      >
         Entrar
       </OrdinaryButton>
     </LoginContainer>

@@ -7,6 +7,8 @@ import ArtistDetailHeader from '../components/ArtistDetailHeader';
 import AlbumListItem from '../components/AlbumListItem';
 import Pagination from '../components/Pagination';
 import { useAuth } from '../contexts/AuthContext';
+import OrdinaryText from '../components/OrdinaryText';
+import useMediaQuery from '../hooks/useMediaQuery';
 
 interface Album {
   name: string;
@@ -39,6 +41,8 @@ const AlbumListContainer = styled.div`
 const ArtistDetail: React.FC = () => {
   const { artist } = useArtist();
   const { accessToken, setAuthInfo } = useAuth();
+  const mediaQuery = useMediaQuery();
+  console.log('🚀 ~ mediaQuery:', mediaQuery);
   const navigate = useNavigate();
 
   const [albums, setAlbums] = useState<Album[]>([]);
@@ -50,7 +54,7 @@ const ArtistDetail: React.FC = () => {
     async (artistId: string, page: number) => {
       setIsLoading(true);
       const token = accessToken || localStorage.getItem('accessToken');
-      const limit = 5;
+      const limit = mediaQuery === 'mobile' ? 6 : 5;
       const offset = (page - 1) * limit;
 
       try {
@@ -109,12 +113,12 @@ const ArtistDetail: React.FC = () => {
 
   return (
     <PageContainer>
-      <NavBar activePage="artists" />
+      {mediaQuery !== 'mobile' ? <NavBar activePage="artists" /> : null}
       <PageMainContainer>
         <ArtistDetailHeader name={artist.name} profilePic={artist.profilePic} />
         <AlbumListContainer data-testid="album-list">
           {isLoading ? (
-            <p>Carregando...</p>
+            <OrdinaryText>Carregando...</OrdinaryText>
           ) : (
             albums.map((album) => {
               const formattedReleaseDate = formatDate(album.release_date);

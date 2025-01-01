@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import useMediaQuery from '../hooks/useMediaQuery';
 
 interface PaginationProps {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
@@ -13,6 +14,11 @@ const PaginationContainer = styled.div`
   gap: 8px;
   margin-top: 16px;
   max-width: 958px;
+
+  @media (max-width: 767px) {
+    padding: 0 24px;
+    align-self: center;
+  }
 `;
 
 const Button = styled.button`
@@ -52,9 +58,11 @@ const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
 }) => {
+  const mediaQuery = useMediaQuery();
+
   const renderPageNumbers = () => {
     const pageNumbers = [];
-    const maxPagesToShow = 5;
+    const maxPagesToShow = mediaQuery === 'mobile' ? 3 : 5;
     let startPage = Math.max(currentPage - Math.floor(maxPagesToShow / 2), 1);
     const endPage = Math.min(startPage + maxPagesToShow - 1, totalPages);
 

@@ -6,6 +6,7 @@ import ArtistListItem from '../components/ArtistListItem';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 import { useAuth } from '../contexts/AuthContext';
+import OrdinaryText from '../components/OrdinaryText';
 
 const PageContainer = styled.div`
   display: flex;
@@ -16,6 +17,11 @@ const PageMainContainer = styled.section`
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  @media (max-width: 767px) {
+    margin-top: 60px;
+    width: 100%;
+  }
 `;
 
 const ArtistListContainer = styled.div`
@@ -24,6 +30,10 @@ const ArtistListContainer = styled.div`
   flex-direction: column;
   gap: 16px;
   margin: 0 32px;
+
+  @media (max-width: 767px) {
+    margin: 0 24px;
+  }
 `;
 
 interface Artist {
@@ -96,7 +106,7 @@ const Artists: React.FC = () => {
         />
         <ArtistListContainer data-testid="artist-list">
           {isLoading ? (
-            <p>Carregando...</p>
+            <OrdinaryText>Carregando...</OrdinaryText>
           ) : (
             topArtists.map((artist, index) => (
               <ArtistListItem

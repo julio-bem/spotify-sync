@@ -7,6 +7,7 @@ interface TextProps {
   fontSize?: string;
   fontWeight?: string;
   lineHeight?: string;
+  textAlign?: string;
 }
 
 const StyledText = styled.p<TextProps>`
@@ -14,6 +15,7 @@ const StyledText = styled.p<TextProps>`
   font-size: ${({ fontSize }) => fontSize || '14px'};
   font-weight: ${({ fontWeight }) => fontWeight || '400'};
   line-height: ${({ lineHeight }) => lineHeight || '20px'};
+  text-align: ${({ textAlign }) => textAlign || 'left'};
 `;
 
 const OrdinaryText: React.FC<TextProps> = ({
@@ -22,6 +24,7 @@ const OrdinaryText: React.FC<TextProps> = ({
   fontSize,
   fontWeight,
   lineHeight,
+  textAlign,
 }) => {
   return (
     <StyledText
@@ -29,6 +32,7 @@ const OrdinaryText: React.FC<TextProps> = ({
       fontSize={fontSize}
       fontWeight={fontWeight}
       lineHeight={lineHeight}
+      textAlign={textAlign}
     >
       {children}
     </StyledText>

@@ -48,12 +48,6 @@ const StyledButton = styled.button<ButtonProps>`
   @media (max-width: 768px) {
     padding: 10px 20px;
     font-size: 14px;
-    width: 100%;
-  }
-
-  @media (max-width: 480px) {
-    padding: 8px 16px;
-    font-size: 12px;
   }
 `;
 

@@ -15,6 +15,10 @@ const ArtistDetailHeaderContainer = styled.div`
   gap: 8px;
   height: 128px;
   margin: 0 32px;
+
+  @media (max-width: 767px) {
+    height: 60px;
+  }
 `;
 
 const Title = styled.h1`
@@ -31,6 +35,15 @@ const ArtistProfilePicture = styled.img`
   object-fit: cover;
   object-position: center;
   margin-left: auto;
+
+  @media (max-width: 767px) {
+    height: 60px;
+    width: 60px;
+    position: relative;
+    top: 20px;
+
+    border: 2px solid #57b660;
+  }
 `;
 
 const ArtistDetailHeader: React.FC<ArtistDetailProps> = ({
