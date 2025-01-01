@@ -9,10 +9,12 @@ import { useNavigate } from 'react-router-dom';
 const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 const SPOTIFY_AUTHORIZE_ENDPOINT = import.meta.env
   .VITE_SPOTIFY_AUTHORIZE_ENDPOINT;
-const REDIRECT_URL_AFTER_LOGIN = import.meta.env.VITE_SPOTIFY_REDIRECT_URL;
 const SCOPES = import.meta.env.VITE_SPOTIFY_SCOPES?.split(' ') || [];
 const SPACE_DELIMITER = '%20';
 const SCOPES_URL_PARAM = SCOPES.join(SPACE_DELIMITER);
+
+const currentUrl = window.location.origin;
+const REDIRECT_URL_AFTER_LOGIN = currentUrl.concat('/home');
 
 const Login: React.FC = () => {
   const { accessToken } = useAuth();
