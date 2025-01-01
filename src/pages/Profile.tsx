@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import OrdinaryButton from '../components/OrdinaryButton';
 import { useAuth } from '../contexts/AuthContext';
 import OrdinaryText from '../components/OrdinaryText';
+import fallbackProfilePicture from '../assets/images/fallback-profile-picture.jpg';
 
 const PageContainer = styled.div`
   display: flex;
@@ -111,7 +112,11 @@ const Profile: React.FC = () => {
         ) : currentProfile ? (
           <>
             <ProfileAvatar
-              src={currentProfile.images[0].url}
+              src={
+                currentProfile.images?.length > 0
+                  ? currentProfile.images[0].url
+                  : fallbackProfilePicture
+              }
               alt="Imagem de perfil do usuário"
             />
             <ProfileTitle>{currentProfile.display_name}</ProfileTitle>
