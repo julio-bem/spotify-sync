@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import ArtistListItem from '../components/ArtistListItem';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../components/Pagination';
+import { useAuth } from '../contexts/AuthContext';
+import OrdinaryText from '../components/OrdinaryText';
 
 const PageContainer = styled.div`
   display: flex;
@@ -15,6 +17,11 @@ const PageMainContainer = styled.section`
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  @media (max-width: 767px) {
+    margin-top: 60px;
+    width: 100%;
+  }
 `;
 
 const ArtistListContainer = styled.div`
@@ -23,6 +30,10 @@ const ArtistListContainer = styled.div`
   flex-direction: column;
   gap: 16px;
   margin: 0 32px;
+
+  @media (max-width: 767px) {
+    margin: 0 24px;
+  }
 `;
 
 interface Artist {
@@ -32,17 +43,18 @@ interface Artist {
 }
 
 const Artists: React.FC = () => {
+  const { accessToken, setAuthInfo } = useAuth();
+  const navigate = useNavigate();
+
   const [topArtists, setTopArtists] = useState<Artist[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const navigate = useNavigate();
-
   const fetchTopArtists = useCallback(
     async (page: number) => {
       setIsLoading(true);
-      const token = localStorage.getItem('accessToken');
+      const token = accessToken || localStorage.getItem('accessToken');
       const limit = 5;
       const offset = (page - 1) * limit;
 
@@ -61,17 +73,23 @@ const Artists: React.FC = () => {
           setTopArtists(data.items);
           setTotalPages(Math.ceil(data.total / limit));
         } else if (response.status === 401) {
+          localStorage.clear();
+          setAuthInfo({
+            access_token: null,
+            expires_in: null,
+            token_type: null,
+          });
           navigate('/');
         } else {
           console.error('Erro ao buscar os top artistas:', response.statusText);
         }
+
+        setIsLoading(false);
       } catch (error) {
         console.error('Erro na requisição:', error);
-      } finally {
-        setIsLoading(false);
       }
     },
-    [navigate]
+    [accessToken, navigate, setAuthInfo]
   );
 
   useEffect(() => {
@@ -86,9 +104,9 @@ const Artists: React.FC = () => {
           title="Top Artistas"
           subtitle="Aqui você encontra seus artistas preferidos"
         />
-        <ArtistListContainer>
+        <ArtistListContainer data-testid="artist-list">
           {isLoading ? (
-            <p>Carregando...</p>
+            <OrdinaryText>Carregando...</OrdinaryText>
           ) : (
             topArtists.map((artist, index) => (
               <ArtistListItem

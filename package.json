@@ -4,8 +4,6 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.2",
@@ -27,11 +25,21 @@
   },
   "scripts": {
     "start": "vite",
+    "dev": "vite",
     "build": "vite build",
+    "serve": "set PORT=3000 && serve dist",
     "preview": "vite preview",
+    "watch": "vite build -w",
+    "icons": "pwa-assets-generator --preset minimal-2023 public/logo.png",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
-    "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,scss,md}'"
+    "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,scss,md}'",
+    "test": "vitest",
+    "cy:open-e2e": "cypress open --e2e --browser firefox",
+    "cy:open-unit": "cypress open --component --browser firefox",
+    "cy:run-e2e": "cypress run --e2e",
+    "cy:run-unit": "cypress run --component",
+    "cy:e2e": "start-server-and-test start http-get://localhost:3000 cy:open-e2e"
   },
   "eslintConfig": {
     "extends": [
@@ -52,8 +60,12 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "@vite-pwa/assets-generator": "^0.2.6",
+    "cypress": "^13.17.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
@@ -62,9 +74,13 @@
     "eslint-plugin-react": "^7.37.3",
     "eslint-plugin-react-hooks": "^5.1.0",
     "husky": "^9.1.7",
+    "jsdom": "^25.0.1",
     "lint-staged": "^15.2.11",
     "prettier": "^3.4.2",
-    "vite-plugin-svgr": "^4.3.0"
+    "start-server-and-test": "^2.0.9",
+    "vite-plugin-pwa": "^0.21.1",
+    "vite-plugin-svgr": "^4.3.0",
+    "vitest": "^2.1.8"
   },
   "husky": {
     "hooks": {

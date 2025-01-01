@@ -3,6 +3,8 @@ import NavBar from '../components/NavBar';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import OrdinaryButton from '../components/OrdinaryButton';
+import { useAuth } from '../contexts/AuthContext';
+import OrdinaryText from '../components/OrdinaryText';
 
 const PageContainer = styled.div`
   display: flex;
@@ -16,6 +18,11 @@ const PageMainContainer = styled.section`
   justify-content: center;
   gap: 24px;
   width: 100%;
+
+  @media (max-width: 767px) {
+    margin-top: 60px;
+    height: calc(100vh - 60px);
+  }
 `;
 
 const ProfileAvatar = styled.img`
@@ -41,12 +48,15 @@ interface Profile {
 }
 
 const Profile: React.FC = () => {
+  const { accessToken, setAuthInfo } = useAuth();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+
+  const [isLoading, setIsLoading] = useState(false);
   const [currentProfile, setCurrentProfile] = useState<Profile>();
 
   const fetchUserProfile = useCallback(async () => {
-    const token = localStorage.getItem('accessToken');
+    setIsLoading(true);
+    const token = accessToken || localStorage.getItem('accessToken');
 
     try {
       const response = await fetch(`https://api.spotify.com/v1/me`, {
@@ -59,19 +69,31 @@ const Profile: React.FC = () => {
         const data = await response.json();
         setCurrentProfile(data);
       } else if (response.status === 401) {
+        localStorage.clear();
+        setAuthInfo({
+          access_token: null,
+          expires_in: null,
+          token_type: null,
+        });
         navigate('/');
       } else {
         console.error('Erro ao buscar perfil:', response.statusText);
       }
+
+      setIsLoading(false);
     } catch (error) {
       console.error('Erro na requisição:', error);
-    } finally {
-      setIsLoading(false);
     }
-  }, [navigate]);
+  }, [accessToken, navigate, setAuthInfo]);
 
   const handleLogout = () => {
     localStorage.clear();
+
+    setAuthInfo({
+      access_token: null,
+      expires_in: null,
+      token_type: null,
+    });
 
     navigate('/');
   };
@@ -85,10 +107,13 @@ const Profile: React.FC = () => {
       <NavBar activePage="profile" />
       <PageMainContainer>
         {isLoading ? (
-          <p>Carregando...</p>
+          <OrdinaryText>Carregando...</OrdinaryText>
         ) : currentProfile ? (
           <>
-            <ProfileAvatar src={currentProfile.images[0].url} />
+            <ProfileAvatar
+              src={currentProfile.images[0].url}
+              alt="Imagem de perfil do usuário"
+            />
             <ProfileTitle>{currentProfile.display_name}</ProfileTitle>
             <OrdinaryButton
               fontWeight="700"
@@ -100,7 +125,7 @@ const Profile: React.FC = () => {
             </OrdinaryButton>
           </>
         ) : (
-          <p>Erro ao obter dados</p>
+          <OrdinaryText>Erro ao obter dados</OrdinaryText>
         )}
       </PageMainContainer>
     </PageContainer>

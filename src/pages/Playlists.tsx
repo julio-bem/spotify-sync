@@ -7,6 +7,8 @@ import Pagination from '../components/Pagination';
 import OrdinaryButton from '../components/OrdinaryButton';
 import PlaylistListItem from '../components/PlaylistListItem';
 import CreatePlaylistModal from '../components/CreatePlaylistModal';
+import { useAuth } from '../contexts/AuthContext';
+import OrdinaryText from '../components/OrdinaryText';
 
 const PageContainer = styled.div`
   display: flex;
@@ -18,6 +20,10 @@ const PageMainContainer = styled.section`
   flex-direction: column;
   gap: 16px;
   width: 100%;
+
+  @media (max-width: 767px) {
+    margin-top: 60px;
+  }
 `;
 
 const PlaylistListContainer = styled.div`
@@ -26,6 +32,11 @@ const PlaylistListContainer = styled.div`
   flex-direction: column;
   gap: 16px;
   margin: 0 32px;
+
+  @media (max-width: 767px) {
+    margin: 0 24px;
+    min-height: 400px;
+  }
 `;
 
 const PageHeader = styled.div`
@@ -35,6 +46,10 @@ const PageHeader = styled.div`
   justify-content: space-between;
   width: 100%;
   padding-right: 32px;
+
+  @media (max-width: 767px) {
+    padding: 0 24px 0 0;
+  }
 `;
 
 interface Playlist {
@@ -46,18 +61,19 @@ interface Playlist {
 }
 
 const Playlists: React.FC = () => {
+  const { accessToken, setAuthInfo } = useAuth();
+  const navigate = useNavigate();
+
   const [topPlaylists, setTopPlaylists] = useState<Playlist[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const navigate = useNavigate();
-
   const fetchPlaylists = useCallback(
     async (page: number) => {
       setIsLoading(true);
-      const token = localStorage.getItem('accessToken');
+      const token = accessToken || localStorage.getItem('accessToken');
       const limit = 5;
       const offset = (page - 1) * limit;
 
@@ -76,17 +92,23 @@ const Playlists: React.FC = () => {
           setTopPlaylists(data.items);
           setTotalPages(Math.ceil(data.total / limit));
         } else if (response.status === 401) {
+          localStorage.clear();
+          setAuthInfo({
+            access_token: null,
+            expires_in: null,
+            token_type: null,
+          });
           navigate('/');
         } else {
           console.error('Erro ao buscar as playlists:', response.statusText);
         }
+
+        setIsLoading(false);
       } catch (error) {
         console.error('Erro na requisição:', error);
-      } finally {
-        setIsLoading(false);
       }
     },
-    [navigate]
+    [accessToken, navigate, setAuthInfo]
   );
 
   useEffect(() => {
@@ -112,7 +134,7 @@ const Playlists: React.FC = () => {
         </PageHeader>
         <PlaylistListContainer>
           {isLoading ? (
-            <p>Carregando...</p>
+            <OrdinaryText>Carregando...</OrdinaryText>
           ) : (
             topPlaylists.map((playlist) => (
               <PlaylistListItem

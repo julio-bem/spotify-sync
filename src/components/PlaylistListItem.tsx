@@ -42,6 +42,10 @@ const PlaylistPicture = styled.img`
   width: 72px;
   object-fit: cover;
   object-position: center;
+
+  @media (max-width: 767px) {
+    height: 64px;
+  }
 `;
 
 const PlaylistDetails = styled.div`
@@ -62,8 +66,12 @@ const PlaylistListItem: React.FC<PlaylistListItemProps> = ({
   };
 
   return (
-    <PlaylistListItemContainer>
-      <PlaylistPicture src={playlistPic} />
+    <PlaylistListItemContainer data-testid="playlist-list-item">
+      <PlaylistPicture
+        src={playlistPic}
+        alt="Imagem da playlist"
+        loading="lazy"
+      />
       <PlaylistDetails onClick={openPlaylist}>
         <PlaylistName>{name}</PlaylistName>
         <PlaylistOwner>{owner}</PlaylistOwner>
