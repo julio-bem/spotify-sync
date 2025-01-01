@@ -4,6 +4,8 @@ import NavButton from './NavButton';
 import SpotifyLogo from './SpotifyLogo';
 import { useNavigate } from 'react-router-dom';
 import PWAButton from './PWAButton';
+import useMediaQuery from '../hooks/useMediaQuery';
+import Hamburger from './HamburgerMenu';
 
 interface NavBarProps {
   activePage: 'home' | 'artists' | 'playlists' | 'profile';
@@ -11,6 +13,7 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({ activePage }) => {
   const navigate = useNavigate();
+  const mediaType = useMediaQuery();
 
   const NavBarContainer = styled.div`
     background-color: #000;
@@ -47,6 +50,8 @@ const NavBar: React.FC<NavBarProps> = ({ activePage }) => {
     { variant: 'profile', label: 'Perfil', path: '/profile' },
   ];
 
+  if (mediaType === 'mobile') return <Hamburger activePage={activePage} />;
+
   return (
     <NavBarContainer>
       <SpotifyLogo
@@ -66,7 +71,7 @@ const NavBar: React.FC<NavBarProps> = ({ activePage }) => {
           </NavButton>
         ))}
       </NavBarMainButtonsContainer>
-      <PWAButton onClick={() => navigate('/home')} />
+      <PWAButton />
     </NavBarContainer>
   );
 };

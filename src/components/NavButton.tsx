@@ -38,6 +38,10 @@ const Text = styled.p<DynamicStyleProps>`
   font-weight: 700;
   line-height: 13px;
   color: ${({ isActive }) => (isActive ? '#fff' : '#949EA2')};
+
+  @media (max-width: 767px) {
+    font-size: 16px;
+  }
 `;
 
 const NavButton: React.FC<NavButtonProps> = ({

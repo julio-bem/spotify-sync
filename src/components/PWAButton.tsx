@@ -3,10 +3,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PWAIcon from '../assets/icons/pwa-icon.svg?react';
 
-interface PWAButtonProps {
-  onClick: () => void;
-}
-
 const PWAButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -26,15 +22,24 @@ const PWAButtonContainer = styled.div`
 const StyledIcon = styled(PWAIcon as React.FC<React.SVGProps<SVGSVGElement>>)`
   width: 24px;
   height: 24px;
+
+  @media (max-width: 767px) {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 const Text = styled.p`
   font-size: 19px;
   font-weight: 700;
   line-height: 13.74px;
+
+  @media (max-width: 767px) {
+    font-size: 16px;
+  }
 `;
 
-const PWAButton: React.FC<PWAButtonProps> = () => {
+const PWAButton: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
   useEffect(() => {
