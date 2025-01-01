@@ -42,6 +42,10 @@ const PlaylistPicture = styled.img`
   width: 72px;
   object-fit: cover;
   object-position: center;
+
+  @media (max-width: 767px) {
+    height: 64px;
+  }
 `;
 
 const PlaylistDetails = styled.div`

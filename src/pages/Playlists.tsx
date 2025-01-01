@@ -19,6 +19,10 @@ const PageMainContainer = styled.section`
   flex-direction: column;
   gap: 16px;
   width: 100%;
+
+  @media (max-width: 767px) {
+    margin-top: 60px;
+  }
 `;
 
 const PlaylistListContainer = styled.div`
@@ -27,6 +31,11 @@ const PlaylistListContainer = styled.div`
   flex-direction: column;
   gap: 16px;
   margin: 0 32px;
+
+  @media (max-width: 767px) {
+    margin: 0 24px;
+    min-height: 400px;
+  }
 `;
 
 const PageHeader = styled.div`
@@ -36,6 +45,10 @@ const PageHeader = styled.div`
   justify-content: space-between;
   width: 100%;
   padding-right: 32px;
+
+  @media (max-width: 767px) {
+    padding: 0 24px 0 0;
+  }
 `;
 
 interface Playlist {
