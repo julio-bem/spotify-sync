@@ -153,9 +153,9 @@ spotify-sync/
 
 ## Extra Informations
 
-1. Since 2023, Spotify has a [quota limit for authentication](#https://developer.spotify.com/documentation/web-api/concepts/quota-modes). Newly-created apps begin in development mode and only users registered in the app's allowlist can access the application. To extend the quota mode and remove this limit, it would be needed to contact Spotify's app review team to take a look at the app and evaluate it for compliance, what could take from several weeks to months. IF needed, contact me with the email associated with the Spotify account and I will input it in the allowlist.
+1. ⚠️ Since 2023, Spotify has a [quota limit for authentication](#https://developer.spotify.com/documentation/web-api/concepts/quota-modes). Newly-created apps begin in development mode and only users registered in the app's allowlist can access the application. To extend the quota mode and remove this limit, it would be needed to contact Spotify's app review team to take a look at the app and evaluate it for compliance, what could take from several weeks to months. IF needed, contact me with the email associated with the Spotify account and I will input it in the allowlist.
 
-2. Chosen Authorization Method: Spotify's API has 4 different Authorization methods. For this app, it was chosen the **Implicit grant**, since it is carried out only on the client side and it does not involve secret keys, what is ideal for the purpose of this application.
+2. Chosen Authorization Method: Spotify's API has 4 different Authorization methods. For this app, it was chosen the **Authorization Code with PKCE Flow**, since it is carried out only on the client side and it does not involve secret keys, what is ideal for the purpose of this application.
 
 ## Author
 
