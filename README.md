@@ -1,6 +1,6 @@
 # Spotify Sync Application
 
-This project is a web application built with TypeScript, React, and Vite that interacts with the Spotify API to provide synchronization and display of user statistics. The application includes several key features, such as authentication with Spotify, a PWA setup for offline functionality, and a responsive design.
+This project is a web application built with TypeScript, React, and Vite that interacts with the Spotify API to provide synchronization and display of user statistics. The application includes several key features, such as authentication with Spotify, a PWA setup for offline functionality, and a responsive design. This project was deployed and is currently live at https://spotify-app-nine-sable.vercel.app/.
 
 ## Table of Contents
 0. [Challenge Requirements](#challenge-requirements)
@@ -159,7 +159,7 @@ spotify-sync/
 
 ## Author
 
-- [Júlio Bem](linkedin.com/in/juliobem/)
+- [Júlio Bem](https://www.linkedin.com/in/juliobem/)
 
 ---------------------------------------
 
