@@ -5,13 +5,17 @@ interface AuthContextType {
   accessToken: string | null;
   tokenType: string | null;
   expiresIn: string | null;
+  refreshToken: string | null;
   setAuthInfo: (authInfo: SpotifyAuthParams) => void;
+  setAccessToken: (token: string) => void;
+  setRefreshToken: (token: string) => void;
 }
 
 interface SpotifyAuthParams {
   access_token: string | null;
   expires_in: string | null;
   token_type: string | null;
+  refresh_token: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -31,9 +35,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [expiresIn, setExpiresIn] = useState<string | null>(
     localStorage.getItem('expiresIn')
   );
+  const [refreshToken, setRefreshToken] = useState<string | null>(
+    localStorage.getItem('refreshToken')
+  );
 
   const getToken = async (code: string) => {
     const codeVerifier = localStorage.getItem('code_verifier') || '';
+    console.log('🚀 ~ getToken ~ codeVerifier:', codeVerifier);
 
     const response = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
@@ -50,41 +58,53 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     });
 
     const data = await response.json();
-    const { access_token, token_type, expires_in } = data;
+    const { access_token, token_type, expires_in, refresh_token } = data;
 
-    localStorage.setItem('accessToken', access_token);
-    localStorage.setItem('tokenType', token_type);
-    localStorage.setItem('expiresIn', expires_in);
+    if (access_token) localStorage.setItem('accessToken', access_token);
+    if (token_type) localStorage.setItem('tokenType', token_type);
+    if (expires_in) localStorage.setItem('expiresIn', expires_in);
+    if (refresh_token) localStorage.setItem('refreshToken', refresh_token);
 
     setAccessToken(access_token);
     setTokenType(token_type);
     setExpiresIn(expires_in);
+    setRefreshToken(refresh_token);
   };
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
 
-    if (code) {
+    if (!accessToken && code) {
       getToken(code);
     }
-  }, []);
+  }, [accessToken]);
 
   const setAuthInfo = (authInfo: SpotifyAuthParams) => {
-    const { access_token, token_type, expires_in } = authInfo;
+    const { access_token, token_type, expires_in, refresh_token } = authInfo;
 
     if (access_token) localStorage.setItem('accessToken', access_token);
     if (token_type) localStorage.setItem('tokenType', token_type);
     if (expires_in) localStorage.setItem('expiresIn', expires_in);
+    if (refresh_token) localStorage.setItem('refreshToken', refresh_token);
 
     setAccessToken(access_token);
     setTokenType(token_type);
     setExpiresIn(expires_in);
+    setRefreshToken(refresh_token);
   };
 
   return (
     <AuthContext.Provider
-      value={{ accessToken, tokenType, expiresIn, setAuthInfo }}
+      value={{
+        setAccessToken,
+        setRefreshToken,
+        accessToken,
+        tokenType,
+        expiresIn,
+        refreshToken,
+        setAuthInfo,
+      }}
     >
       {children}
     </AuthContext.Provider>

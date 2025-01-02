@@ -6,6 +6,7 @@ import OrdinaryButton from '../components/OrdinaryButton';
 import { useAuth } from '../contexts/AuthContext';
 import OrdinaryText from '../components/OrdinaryText';
 import fallbackProfilePicture from '../assets/images/fallback-profile-picture.jpg';
+import { useRefreshToken } from '../hooks/useRefreshToken';
 
 const PageContainer = styled.div`
   display: flex;
@@ -50,6 +51,7 @@ interface Profile {
 
 const Profile: React.FC = () => {
   const { accessToken, setAuthInfo } = useAuth();
+  const { getRefreshToken } = useRefreshToken();
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -70,13 +72,8 @@ const Profile: React.FC = () => {
         const data = await response.json();
         setCurrentProfile(data);
       } else if (response.status === 401) {
-        localStorage.clear();
-        setAuthInfo({
-          access_token: null,
-          expires_in: null,
-          token_type: null,
-        });
-        navigate('/');
+        await getRefreshToken();
+        fetchUserProfile();
       } else {
         console.error('Erro ao buscar perfil:', response.statusText);
       }
@@ -85,7 +82,8 @@ const Profile: React.FC = () => {
     } catch (error) {
       console.error('Erro na requisição:', error);
     }
-  }, [accessToken, navigate, setAuthInfo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accessToken]);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -94,6 +92,7 @@ const Profile: React.FC = () => {
       access_token: null,
       expires_in: null,
       token_type: null,
+      refresh_token: null,
     });
 
     navigate('/');
