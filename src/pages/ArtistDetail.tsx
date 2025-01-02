@@ -9,6 +9,7 @@ import Pagination from '../components/Pagination';
 import { useAuth } from '../contexts/AuthContext';
 import OrdinaryText from '../components/OrdinaryText';
 import useMediaQuery from '../hooks/useMediaQuery';
+import { useRefreshToken } from '../hooks/useRefreshToken';
 
 interface Album {
   name: string;
@@ -40,15 +41,16 @@ const AlbumListContainer = styled.div`
 
 const ArtistDetail: React.FC = () => {
   const { artist } = useArtist();
-  const { accessToken, setAuthInfo } = useAuth();
+  const { accessToken } = useAuth();
   const mediaQuery = useMediaQuery();
-  console.log('🚀 ~ mediaQuery:', mediaQuery);
   const navigate = useNavigate();
 
   const [albums, setAlbums] = useState<Album[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+
+  const { getRefreshToken } = useRefreshToken();
 
   const fetchArtistAlbums = useCallback(
     async (artistId: string, page: number) => {
@@ -72,13 +74,8 @@ const ArtistDetail: React.FC = () => {
           setAlbums(data.items);
           setTotalPages(Math.ceil(data.total / limit));
         } else if (response.status === 401) {
-          localStorage.clear();
-          setAuthInfo({
-            access_token: null,
-            expires_in: null,
-            token_type: null,
-          });
-          navigate('/');
+          await getRefreshToken();
+          fetchArtistAlbums(artistId, page);
         } else {
           console.error('Erro ao buscar os álbuns:', response.statusText);
         }
@@ -88,7 +85,8 @@ const ArtistDetail: React.FC = () => {
         console.error('Erro na requisição:', error);
       }
     },
-    [accessToken, navigate, setAuthInfo]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [accessToken, mediaQuery]
   );
 
   useEffect(() => {

@@ -3,10 +3,10 @@ import NavBar from '../components/NavBar';
 import PageHeading from '../components/PageHeading';
 import styled from 'styled-components';
 import ArtistListItem from '../components/ArtistListItem';
-import { useNavigate } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 import { useAuth } from '../contexts/AuthContext';
 import OrdinaryText from '../components/OrdinaryText';
+import { useRefreshToken } from '../hooks/useRefreshToken';
 
 const PageContainer = styled.div`
   display: flex;
@@ -43,13 +43,14 @@ interface Artist {
 }
 
 const Artists: React.FC = () => {
-  const { accessToken, setAuthInfo } = useAuth();
-  const navigate = useNavigate();
+  const { accessToken } = useAuth();
 
   const [topArtists, setTopArtists] = useState<Artist[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+
+  const { getRefreshToken } = useRefreshToken();
 
   const fetchTopArtists = useCallback(
     async (page: number) => {
@@ -73,23 +74,19 @@ const Artists: React.FC = () => {
           setTopArtists(data.items);
           setTotalPages(Math.ceil(data.total / limit));
         } else if (response.status === 401) {
-          localStorage.clear();
-          setAuthInfo({
-            access_token: null,
-            expires_in: null,
-            token_type: null,
-          });
-          navigate('/');
+          await getRefreshToken();
+          fetchTopArtists(page);
         } else {
           console.error('Erro ao buscar os top artistas:', response.statusText);
         }
-
-        setIsLoading(false);
       } catch (error) {
         console.error('Erro na requisição:', error);
+      } finally {
+        setIsLoading(false);
       }
     },
-    [accessToken, navigate, setAuthInfo]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [accessToken]
   );
 
   useEffect(() => {
