@@ -2,13 +2,13 @@ import React, { useState, useCallback, useEffect } from 'react';
 import NavBar from '../components/NavBar';
 import PageHeading from '../components/PageHeading';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 import OrdinaryButton from '../components/OrdinaryButton';
 import PlaylistListItem from '../components/PlaylistListItem';
 import CreatePlaylistModal from '../components/CreatePlaylistModal';
 import { useAuth } from '../contexts/AuthContext';
 import OrdinaryText from '../components/OrdinaryText';
+import { useRefreshToken } from '../hooks/useRefreshToken';
 
 const PageContainer = styled.div`
   display: flex;
@@ -61,8 +61,8 @@ interface Playlist {
 }
 
 const Playlists: React.FC = () => {
-  const { accessToken, setAuthInfo } = useAuth();
-  const navigate = useNavigate();
+  const { accessToken } = useAuth();
+  const { getRefreshToken } = useRefreshToken();
 
   const [topPlaylists, setTopPlaylists] = useState<Playlist[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -92,13 +92,8 @@ const Playlists: React.FC = () => {
           setTopPlaylists(data.items);
           setTotalPages(Math.ceil(data.total / limit));
         } else if (response.status === 401) {
-          localStorage.clear();
-          setAuthInfo({
-            access_token: null,
-            expires_in: null,
-            token_type: null,
-          });
-          navigate('/');
+          await getRefreshToken();
+          fetchPlaylists(page);
         } else {
           console.error('Erro ao buscar as playlists:', response.statusText);
         }
@@ -108,7 +103,8 @@ const Playlists: React.FC = () => {
         console.error('Erro na requisição:', error);
       }
     },
-    [accessToken, navigate, setAuthInfo]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [accessToken]
   );
 
   useEffect(() => {
