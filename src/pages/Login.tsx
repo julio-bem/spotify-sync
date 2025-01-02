@@ -10,9 +10,8 @@ import useMediaQuery from '../hooks/useMediaQuery';
 const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 const SPOTIFY_AUTHORIZE_ENDPOINT = import.meta.env
   .VITE_SPOTIFY_AUTHORIZE_ENDPOINT;
-const SCOPES = import.meta.env.VITE_SPOTIFY_SCOPES?.split(' ') || [];
-const SPACE_DELIMITER = '%20';
-const SCOPES_URL_PARAM = SCOPES.join(SPACE_DELIMITER);
+const SCOPES = import.meta.env.VITE_SPOTIFY_SCOPES;
+console.log('🚀 ~ SCOPES:', SCOPES);
 
 const currentUrl = window.location.origin;
 const REDIRECT_URL_AFTER_LOGIN = currentUrl.concat('/home');
@@ -24,7 +23,7 @@ const Login: React.FC = () => {
   const mediaQuery = useMediaQuery();
   console.log('🚀 ~ mediaQuery:', mediaQuery);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (token) {
       navigate('/home');
     } else if (
@@ -32,7 +31,49 @@ const Login: React.FC = () => {
       SPOTIFY_AUTHORIZE_ENDPOINT &&
       REDIRECT_URL_AFTER_LOGIN
     ) {
-      window.location.href = `${SPOTIFY_AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL_AFTER_LOGIN}&scope=${SCOPES_URL_PARAM}&response_type=token&show_dialog=true`;
+      const authUrl = new URL(SPOTIFY_AUTHORIZE_ENDPOINT);
+
+      const generateRandomString = (length: number) => {
+        const possible =
+          'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const values = crypto.getRandomValues(new Uint8Array(length));
+        return values.reduce(
+          (acc, x) => acc + possible[x % possible.length],
+          ''
+        );
+      };
+
+      const codeVerifier = generateRandomString(64);
+
+      const sha256 = async (plain: string) => {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(plain);
+        return window.crypto.subtle.digest('SHA-256', data);
+      };
+
+      const base64encode = (input: ArrayBuffer) => {
+        return btoa(String.fromCharCode(...new Uint8Array(input)))
+          .replace(/=/g, '')
+          .replace(/\+/g, '-')
+          .replace(/\//g, '_');
+      };
+
+      const hashed = await sha256(codeVerifier);
+      const codeChallenge = base64encode(hashed);
+
+      window.localStorage.setItem('code_verifier', codeVerifier);
+
+      const params = {
+        response_type: 'code',
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        code_challenge_method: 'S256',
+        code_challenge: codeChallenge,
+        redirect_uri: REDIRECT_URL_AFTER_LOGIN,
+      };
+
+      authUrl.search = new URLSearchParams(params).toString();
+      window.location.href = authUrl.toString();
     } else {
       console.error('Missing Spotify configuration.');
     }
